@@ -1,0 +1,42 @@
+:root {
+  --fg: #1a1d21;
+  --fg-secondary: #6b7280;
+  --bg: #ffffff;
+  --bg-secondary: #f7f8fa;
+
+  --btn: #2f3542;
+  --btn-hover: #454d5e;
+  --btn-fg: #ffffff;
+
+  --border: #e4e6eb;
+
+  --danger: #d14343;
+  --success: #2f9e56;
+
+  --overlay: rgba(26, 29, 33, 0.3);
+
+  --shadow-sm: 0 2px 10px rgba(26, 29, 33, 0.06);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-full: 9999px;
+
+  --control-h: 36px;
+  --control-h-sm: 30px;
+  --header-h: 50px;
+  --sidebar-w: 190px;
+  --form-w-sm: 400px;
+  --form-w-md: 800px;
+
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+
+  --fs-xs: 12.5px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+
+  --transition: 0.1s;
+}
