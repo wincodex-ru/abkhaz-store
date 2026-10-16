@@ -2,8 +2,13 @@ import type { CollectionConfig } from 'payload'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
+  labels: {
+    singular: 'Категория',
+    plural: 'Категории',
+  },
   admin: {
     useAsTitle: 'title',
+    group: 'Блог',
   },
   access: {
     read: () => true,
@@ -16,19 +21,19 @@ export const Categories: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      label: 'Название',
     },
     {
       name: 'slug',
       type: 'text',
       required: true,
       unique: true,
-      admin: {
-        position: 'sidebar',
-      },
+      label: 'Слаг',
     },
     {
       name: 'description',
       type: 'textarea',
+      label: 'Описание',
     },
   ],
 }

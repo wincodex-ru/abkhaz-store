@@ -2,6 +2,13 @@ import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  labels: {
+    singular: 'Медиа',
+    plural: 'Медиа',
+  },
+  admin: {
+    group: 'Блог',
+  },
   access: {
     read: () => true,
     create: ({ req: { user } }) => user?.role === 'admin',
@@ -13,6 +20,7 @@ export const Media: CollectionConfig = {
       name: 'alt',
       type: 'text',
       required: true,
+      label: 'Alt-текст',
     },
   ],
   upload: true,

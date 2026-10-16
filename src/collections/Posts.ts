@@ -1,10 +1,25 @@
 import type { CollectionConfig } from 'payload'
 
+function lexicalToPlainText(node: any): string {
+  if (!node) return ''
+  if (typeof node === 'string') return node
+  if (Array.isArray(node)) return node.map(lexicalToPlainText).join(' ')
+  let text = ''
+  if (node.text) text += node.text + ' '
+  if (node.children) text += lexicalToPlainText(node.children)
+  return text
+}
+
 export const Posts: CollectionConfig = {
   slug: 'posts',
+  labels: {
+    singular: 'Статья',
+    plural: 'Статьи',
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'status', 'publishedAt', 'author'],
+    group: 'Блог',
   },
   access: {
     read: ({ req: { user } }) => {
@@ -27,104 +42,134 @@ export const Posts: CollectionConfig = {
         if (data.status === 'draft' && originalDoc?.status === 'published') {
           data.publishedAt = null
         }
+        if (data.content) {
+          const text = lexicalToPlainText(data.content.root)
+          const words = text.trim().split(/\s+/).filter(Boolean).length
+          data.readingTime = Math.max(1, Math.ceil(words / 200))
+        }
         return data
       },
     ],
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'slug',
-      type: 'text',
-      required: true,
-      unique: true,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'excerpt',
-      type: 'textarea',
-    },
-    {
-      name: 'content',
-      type: 'richText',
-      required: true,
-    },
-    {
-      name: 'cover',
-      type: 'upload',
-      relationTo: 'media',
-    },
-    {
-      name: 'author',
-      type: 'relationship',
-      relationTo: 'users',
-      required: true,
-      admin: {
-        position: 'sidebar',
-        hidden: true,
-      },
-    },
-    {
-      name: 'categories',
-      type: 'relationship',
-      relationTo: 'categories',
-      hasMany: true,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'tags',
-      type: 'relationship',
-      relationTo: 'tags',
-      hasMany: true,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'status',
-      type: 'select',
-      required: true,
-      defaultValue: 'draft',
-      options: ['draft', 'published'],
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'publishedAt',
-      type: 'date',
-      admin: {
-        position: 'sidebar',
-        hidden: true,
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
-      },
-    },
-    {
-      name: 'seo',
-      type: 'group',
-      fields: [
+      type: 'tabs',
+      tabs: [
         {
-          name: 'title',
-          type: 'text',
+          label: 'Основное',
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              required: true,
+              label: 'Заголовок',
+            },
+            {
+              name: 'slug',
+              type: 'text',
+              required: true,
+              unique: true,
+              label: 'Слаг',
+            },
+            {
+              name: 'excerpt',
+              type: 'textarea',
+              label: 'Краткое описание',
+            },
+            {
+              name: 'content',
+              type: 'richText',
+              required: true,
+              label: 'Контент',
+            },
+            {
+              name: 'cover',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Обложка',
+            },
+            {
+              name: 'readingTime',
+              type: 'number',
+              label: 'Время чтения (мин)',
+              admin: {
+                readOnly: true,
+                hidden: true,
+              },
+            },
+            {
+              name: 'categories',
+              type: 'relationship',
+              relationTo: 'categories',
+              hasMany: true,
+              label: 'Категории',
+            },
+            {
+              name: 'author',
+              type: 'relationship',
+              relationTo: 'users',
+              required: true,
+              label: 'Автор',
+              admin: {
+                hidden: true,
+              },
+            },
+          ],
         },
         {
-          name: 'description',
-          type: 'textarea',
+          label: 'Публикация',
+          fields: [
+            {
+              name: 'status',
+              type: 'select',
+              required: true,
+              defaultValue: 'draft',
+              label: 'Статус',
+              options: [
+                { label: 'Черновик', value: 'draft' },
+                { label: 'Опубликовано', value: 'published' },
+              ],
+            },
+            {
+              name: 'publishedAt',
+              type: 'date',
+              label: 'Дата публикации',
+              admin: {
+                hidden: true,
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                },
+              },
+            },
+          ],
         },
         {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
+          label: 'SEO',
+          fields: [
+            {
+              name: 'seo',
+              type: 'group',
+              label: 'SEO',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: 'SEO-заголовок',
+                },
+                {
+                  name: 'description',
+                  type: 'textarea',
+                  label: 'SEO-описание',
+                },
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'SEO-изображение',
+                },
+              ],
+            },
+          ],
         },
       ],
     },

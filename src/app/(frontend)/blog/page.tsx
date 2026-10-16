@@ -1,40 +1,99 @@
-import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
-import styles from './index.module.css'
+import { BlogIndex } from './_components/BlogIndex'
 
 export const revalidate = 60
 
 export const metadata = {
   title: 'Блог — Apsgram',
+  description: 'Статьи об Абхазии: природа, море, города, маршруты, история, культура, кухня.',
+  alternates: {
+    canonical: '/blog',
+  },
+  openGraph: {
+    title: 'Блог — Apsgram',
+    description: 'Статьи об Абхазии: природа, море, города, маршруты, история, культура, кухня.',
+    type: 'website',
+    url: '/blog',
+  },
 }
 
-export default async function BlogPage() {
+const PER_PAGE = 12
+
+type Props = {
+  searchParams: Promise<{ page?: string; q?: string }>
+}
+
+export default async function BlogPage({ searchParams }: Props) {
+  const { page: pageParam, q } = await searchParams
+  const page = Math.max(1, Number(pageParam) || 1)
+  const query = q?.trim() || ''
+
   const payload = await getPayload({ config })
-  const { docs: posts } = await payload.find({
+
+  const where: any = {
+    status: { equals: 'published' },
+  }
+  if (query) {
+    where.title = { contains: query }
+  }
+
+  const {
+    docs: posts,
+    totalPages,
+    page: currentPage,
+  } = await payload.find({
     collection: 'posts',
-    where: { status: { equals: 'published' } },
+    where,
     sort: '-publishedAt',
-    limit: 20,
+    limit: PER_PAGE,
+    page,
+    depth: 2,
   })
 
+  const { docs: categories } = await payload.find({
+    collection: 'categories',
+    limit: 100,
+    sort: 'title',
+  })
+
+  const buildHref = (p: number) => {
+    const params = new URLSearchParams()
+    if (query) params.set('q', query)
+    if (p > 1) params.set('page', String(p))
+    const qs = params.toString()
+    return qs ? `/blog?${qs}` : '/blog'
+  }
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Блог — Apsgram',
+    url: '/blog',
+    blogPost: posts.map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.title,
+      url: `/blog/${post.slug}`,
+      datePublished: post.publishedAt,
+    })),
+  }
+
   return (
-    <div className={styles.root}>
-      <h1 className={styles.title}>Блог</h1>
-      {posts.length === 0 ? (
-        <p className={styles.empty}>Пока нет статей</p>
-      ) : (
-        <ul className={styles.list}>
-          {posts.map((post) => (
-            <li key={post.id} className={styles.item}>
-              <Link href={`/blog/${post.slug}`} className={styles.link}>
-                <h2 className={styles.itemTitle}>{post.title}</h2>
-                {post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <>
+      <BlogIndex
+        posts={posts}
+        categories={categories}
+        currentPage={currentPage ?? 1}
+        totalPages={totalPages ?? 1}
+        query={query}
+        heading="Блог"
+        buildHref={buildHref}
+        searchAction="/blog"
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+    </>
   )
 }
