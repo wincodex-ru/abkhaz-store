@@ -144,7 +144,7 @@ export default async function PostPage({ params }: Props) {
       <div className={styles.metaRow}>
         <div className={styles.authorMeta}>
           <span className={styles.avatar}></span>
-          <span>Автор</span>
+          <span>{author?.name || 'Автор'}</span>
           {date && (
             <>
               <span className={styles.dot}>·</span>

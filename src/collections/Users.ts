@@ -28,6 +28,11 @@ export const Users: CollectionConfig = {
   },
   fields: [
     {
+      name: 'name',
+      type: 'text',
+      label: 'Отображаемое имя',
+    },
+    {
       name: 'role',
       type: 'select',
       required: true,

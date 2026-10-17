@@ -1,6 +1,7 @@
 import React from 'react'
 import { Onest } from 'next/font/google'
 import { Layout } from '@/components/Layout'
+import { AlertProvider } from '@/components/Alert'
 import './styles/globals.css'
 
 const onest = Onest({
@@ -20,7 +21,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="ru" className={onest.variable}>
       <body>
-        <Layout>{children}</Layout>
+        <AlertProvider>
+          <Layout>{children}</Layout>
+        </AlertProvider>
       </body>
     </html>
   )

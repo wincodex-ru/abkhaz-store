@@ -3,7 +3,7 @@ import styles from './index.module.css'
 
 type Props = {
   href: string
-  variant?: 'primary' | 'ghost'
+  variant?: 'primary' | 'ghost' | 'plain'
   size?: 'sm' | 'md'
   children: React.ReactNode
 }

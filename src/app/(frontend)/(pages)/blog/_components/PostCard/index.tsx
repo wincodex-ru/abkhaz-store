@@ -36,7 +36,7 @@ export function PostCard({ post }: Props) {
       <div className={styles.body}>
         <div className={styles.authorMeta}>
           <span className={styles.avatar}></span>
-          <span>Автор</span>
+          <span>{author?.name || 'Автор'}</span>
           {date && (
             <>
               <span className={styles.dot}>·</span>
