@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { BlogIndex } from '../../_components/BlogIndex'
+import { JsonLd } from '@/components/JsonLd'
 
 export const revalidate = 300
 
@@ -22,15 +23,18 @@ async function getCategory(slug: string) {
   return docs[0] ?? null
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params, searchParams }: Props) {
   const { slug } = await params
+  const { q } = await searchParams
+  const query = q?.trim() || ''
+
   const category = await getCategory(slug)
   if (!category) return {}
 
   const title = `${category.title} — Apsgram`
   const description = `Статьи об Абхазии в категории «${category.title}».`
 
-  return {
+  const metadata: any = {
     title,
     description,
     alternates: {
@@ -43,6 +47,12 @@ export async function generateMetadata({ params }: Props) {
       url: `/blog/category/${category.slug}`,
     },
   }
+
+  if (query) {
+    metadata.robots = { index: false, follow: true }
+  }
+
+  return metadata
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {
@@ -125,10 +135,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         buildHref={buildHref}
         searchAction={`/blog/category/${category.slug}`}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
     </>
   )
 }

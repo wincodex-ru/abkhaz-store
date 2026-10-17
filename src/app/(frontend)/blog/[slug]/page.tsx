@@ -1,11 +1,12 @@
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Category, Media, User } from '@/payload-types'
 import Icon from '@/components/Icon'
+import { JsonLd } from '@/components/JsonLd'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import styles from './index.module.css'
 
 export const revalidate = 60
@@ -127,17 +128,16 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <article className={styles.root}>
-      <nav className={styles.breadcrumbs} aria-label="Хлебные крошки">
-        <Link href="/">Главная</Link>
-        <span> / </span>
-        <Link href="/blog">Блог</Link>
-        {categories.length > 0 && (
-          <>
-            <span> / </span>
-            <Link href={`/blog/category/${categories[0].slug}`}>{categories[0].title}</Link>
-          </>
-        )}
-      </nav>
+      <Breadcrumbs
+        items={[
+          { label: 'Главная', href: '/' },
+          { label: 'Блог', href: '/blog' },
+          ...(categories.length > 0
+            ? [{ label: categories[0].title, href: `/blog/category/${categories[0].slug}` }]
+            : []),
+          { label: post.title },
+        ]}
+      />
 
       <h1 className={styles.title}>{post.title}</h1>
 
@@ -178,10 +178,7 @@ export default async function PostPage({ params }: Props) {
         <RichText data={post.content} />
       </div>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
     </article>
   )
 }

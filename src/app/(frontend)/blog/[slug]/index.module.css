@@ -4,21 +4,6 @@
   padding: var(--sp-3) 0;
 }
 
-.breadcrumbs {
-  font-size: var(--fs-base);
-  color: var(--fg-secondary);
-  margin-bottom: var(--sp-3);
-}
-
-.breadcrumbs a {
-  color: var(--fg-secondary);
-  text-decoration: none;
-}
-
-.breadcrumbs a:hover {
-  color: var(--fg);
-}
-
 .title {
   font-size: var(--fs-3xl);
   font-weight: var(--fw);
@@ -55,16 +40,11 @@
   margin-right: var(--sp-1);
 }
 
-.publishedAt {
-  font-size: var(--fs-xs);
-}
-
 .stats {
   display: flex;
   align-items: center;
   gap: var(--sp-3);
   color: var(--fg-secondary);
-  font-size: var(--fs-xs);
 }
 
 .statItem {

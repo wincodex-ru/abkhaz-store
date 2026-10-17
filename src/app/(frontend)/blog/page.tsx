@@ -1,27 +1,39 @@
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { BlogIndex } from './_components/BlogIndex'
+import { JsonLd } from '@/components/JsonLd'
 
 export const revalidate = 60
-
-export const metadata = {
-  title: 'Блог — Apsgram',
-  description: 'Статьи об Абхазии: природа, море, города, маршруты, история, культура, кухня.',
-  alternates: {
-    canonical: '/blog',
-  },
-  openGraph: {
-    title: 'Блог — Apsgram',
-    description: 'Статьи об Абхазии: природа, море, города, маршруты, история, культура, кухня.',
-    type: 'website',
-    url: '/blog',
-  },
-}
 
 const PER_PAGE = 12
 
 type Props = {
   searchParams: Promise<{ page?: string; q?: string }>
+}
+
+export async function generateMetadata({ searchParams }: Props) {
+  const { q } = await searchParams
+  const query = q?.trim() || ''
+
+  const metadata: any = {
+    title: 'Блог — Apsgram',
+    description: 'Статьи об Абхазии',
+    alternates: {
+      canonical: '/blog',
+    },
+    openGraph: {
+      title: 'Блог — Apsgram',
+      description: 'Статьи об Абхазии',
+      type: 'website',
+      url: '/blog',
+    },
+  }
+
+  if (query) {
+    metadata.robots = { index: false, follow: true }
+  }
+
+  return metadata
 }
 
 export default async function BlogPage({ searchParams }: Props) {
@@ -90,10 +102,7 @@ export default async function BlogPage({ searchParams }: Props) {
         buildHref={buildHref}
         searchAction="/blog"
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
     </>
   )
 }

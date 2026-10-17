@@ -1,0 +1,16 @@
+.root {
+  width: 100%;
+  text-align: left;
+  font-size: var(--fs-base);
+  color: var(--fg-secondary);
+  margin-bottom: var(--sp-3);
+}
+
+.root a {
+  color: var(--fg-secondary);
+  text-decoration: none;
+}
+
+.root a:hover {
+  color: var(--fg);
+}
