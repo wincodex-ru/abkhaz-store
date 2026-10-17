@@ -1,13 +1,13 @@
-import type { ReactElement, SVGProps } from "react";
+import type { ReactElement, SVGProps } from 'react'
 
 type IconDef = {
-  viewBox: string;
-  content: ReactElement;
-};
+  viewBox: string
+  content: ReactElement
+}
 
 const icons: Record<string, IconDef> = {
   user: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -23,7 +23,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   externalLink: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -39,7 +39,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   copy: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -54,7 +54,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   folder: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <path
         fill="none"
@@ -66,8 +66,23 @@ const icons: Record<string, IconDef> = {
       />
     ),
   },
+  clock: {
+    viewBox: '0 0 24 24',
+    content: (
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 6v6l4 2" />
+      </g>
+    ),
+  },
   messageSquare: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <path
         fill="none"
@@ -80,7 +95,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   settings: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -95,7 +110,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   grip: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -114,7 +129,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   logOut: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -130,7 +145,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   chevronLeft: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <path
         fill="none"
@@ -143,7 +158,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   chevronRight: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <path
         fill="none"
@@ -156,7 +171,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   check: {
-    viewBox: "0 0 14 14",
+    viewBox: '0 0 14 14',
     content: (
       <path
         fill="currentColor"
@@ -165,7 +180,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   chevronUpDown: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -180,7 +195,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   send: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -195,7 +210,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   calendar: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -218,7 +233,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   cross: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -233,7 +248,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   ellipsis: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -249,7 +264,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   eye: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -264,7 +279,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   eyeOff: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -281,7 +296,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   search: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -296,7 +311,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   edit: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -311,7 +326,7 @@ const icons: Record<string, IconDef> = {
     ),
   },
   trash: {
-    viewBox: "0 0 24 24",
+    viewBox: '0 0 24 24',
     content: (
       <g
         fill="none"
@@ -328,17 +343,17 @@ const icons: Record<string, IconDef> = {
       </g>
     ),
   },
-};
+}
 
-export type IconName = keyof typeof icons;
+export type IconName = keyof typeof icons
 
 type Props = SVGProps<SVGSVGElement> & {
-  name: IconName;
-  size?: number;
-};
+  name: IconName
+  size?: number
+}
 
 export default function Icon({ name, size = 20, ...props }: Props) {
-  const { viewBox, content } = icons[name];
+  const { viewBox, content } = icons[name]
 
   return (
     <svg
@@ -351,5 +366,5 @@ export default function Icon({ name, size = 20, ...props }: Props) {
     >
       {content}
     </svg>
-  );
+  )
 }

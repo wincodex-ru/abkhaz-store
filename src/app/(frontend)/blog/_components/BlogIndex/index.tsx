@@ -32,11 +32,11 @@ export function BlogIndex({
 }: Props) {
   return (
     <div className={styles.wrapper}>
-      <div className={styles.root}>
+      <header className={styles.header}>
         <SearchInput defaultValue={query} action={searchAction} hiddenCategory={hiddenCategory} />
 
         {categories.length > 0 && (
-          <nav className={styles.categories}>
+          <nav className={styles.categories} aria-label="Категории">
             <Link
               href="/blog"
               className={`${styles.categoryLink} ${
@@ -58,25 +58,25 @@ export function BlogIndex({
             ))}
           </nav>
         )}
-      </div>
+      </header>
 
-      <section className={styles.gridSection}>
-        <div className={styles.gridInner}>
-          {posts.length === 0 ? (
-            <p className={styles.empty}>
-              {query ? `Ничего не найдено по запросу «${query}»` : 'Пока нет статей'}
-            </p>
-          ) : (
-            <div className={styles.grid}>
-              {posts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </div>
-          )}
+      <main className={styles.content}>
+        <h1 className={styles.title}>{heading}</h1>
 
-          <Pagination currentPage={currentPage} totalPages={totalPages} buildHref={buildHref} />
-        </div>
-      </section>
+        {posts.length === 0 ? (
+          <p className={styles.empty}>
+            {query ? `Ничего не найдено по запросу «${query}»` : 'Пока нет статей'}
+          </p>
+        ) : (
+          <div className={styles.grid}>
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
+
+        <Pagination currentPage={currentPage} totalPages={totalPages} buildHref={buildHref} />
+      </main>
     </div>
   )
 }

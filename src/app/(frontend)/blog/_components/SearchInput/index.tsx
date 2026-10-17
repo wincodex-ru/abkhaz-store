@@ -32,7 +32,7 @@ export function SearchInput({ defaultValue, action, hiddenCategory }: Props) {
         name="q"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Поиск по статьям"
+        placeholder="Что хотите почитать ?"
         className={styles.searchInput}
       />
       {value && (

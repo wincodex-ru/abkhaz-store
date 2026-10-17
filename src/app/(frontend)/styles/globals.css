@@ -11,9 +11,8 @@ body {
 }
 
 body {
-  font-family: system-ui, sans-serif;
-  font-size: var(--fs-sm);
-  line-height: 1.5;
+  font-family: var(--font-onest), system-ui, sans-serif;
+  font-size: var(--fs-base);
   color: var(--fg);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;

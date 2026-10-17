@@ -86,7 +86,7 @@ export default async function BlogPage({ searchParams }: Props) {
         currentPage={currentPage ?? 1}
         totalPages={totalPages ?? 1}
         query={query}
-        heading="Блог"
+        heading="Все категории"
         buildHref={buildHref}
         searchAction="/blog"
       />

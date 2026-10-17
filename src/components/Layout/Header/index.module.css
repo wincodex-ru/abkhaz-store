@@ -9,7 +9,7 @@
 }
 
 .logo {
-  font-size: var(--fs-h5);
+  font-size: var(--fs-md);
   font-weight: var(--fw);
   color: var(--fg);
   text-decoration: none;

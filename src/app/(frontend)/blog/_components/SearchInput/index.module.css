@@ -1,6 +1,6 @@
 .search {
   position: relative;
-  max-width: var(--form-w-sm);
+  width: var(--form-w-sm);
   margin: 0 auto var(--sp-3);
 }
 
@@ -20,7 +20,7 @@
   border: none;
   border-radius: var(--radius-sm);
   font: inherit;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-base);
   background: var(--bg-secondary);
   color: var(--fg);
   -webkit-appearance: none;

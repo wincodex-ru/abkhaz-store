@@ -5,12 +5,21 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Category, Media, User } from '@/payload-types'
+import Icon from '@/components/Icon'
 import styles from './index.module.css'
 
 export const revalidate = 60
 
 type Props = {
   params: Promise<{ slug: string }>
+}
+
+function formatDate(iso: string): string {
+  const d = new Date(iso)
+  const day = d.getDate()
+  const month = d.toLocaleDateString('ru-RU', { month: 'short' }).replace('.', '')
+  const year = d.getFullYear()
+  return `${day} ${month}. ${year}`
 }
 
 async function getPost(slug: string) {
@@ -72,13 +81,7 @@ export default async function PostPage({ params }: Props) {
     ? post.categories.filter((c): c is Category => typeof c === 'object')
     : []
 
-  const date = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString('ru-RU', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
-    : null
+  const date = post.publishedAt ? formatDate(post.publishedAt) : null
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -102,9 +105,19 @@ export default async function PostPage({ params }: Props) {
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Главная', item: '/' },
         { '@type': 'ListItem', position: 2, name: 'Блог', item: '/blog' },
+        ...(categories.length > 0
+          ? [
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: categories[0].title,
+                item: `/blog/category/${categories[0].slug}`,
+              },
+            ]
+          : []),
         {
           '@type': 'ListItem',
-          position: 3,
+          position: categories.length > 0 ? 4 : 3,
           name: post.title,
           item: `/blog/${post.slug}`,
         },
@@ -128,21 +141,27 @@ export default async function PostPage({ params }: Props) {
 
       <h1 className={styles.title}>{post.title}</h1>
 
-      <div className={styles.meta}>
-        {author?.email && <span>{author.email}</span>}
-        {date && <time dateTime={post.publishedAt || undefined}>{date}</time>}
-        {post.readingTime && <span>· {post.readingTime} мин</span>}
-      </div>
-
-      {categories.length > 0 && (
-        <div className={styles.categories}>
-          {categories.map((cat) => (
-            <Link key={cat.id} href={`/blog/category/${cat.slug}`} className={styles.category}>
-              {cat.title}
-            </Link>
-          ))}
+      <div className={styles.metaRow}>
+        <div className={styles.authorMeta}>
+          <span className={styles.avatar}></span>
+          <span>Автор</span>
+          {date && (
+            <>
+              <span className={styles.dot}>·</span>
+              <time dateTime={post.publishedAt || undefined} className={styles.publishedAt}>
+                {date}
+              </time>
+            </>
+          )}
         </div>
-      )}
+
+        <div className={styles.stats}>
+          <span className={styles.statItem}>
+            <Icon name="clock" size={16} />
+            {post.readingTime || 1} мин
+          </span>
+        </div>
+      </div>
 
       {cover?.url && (
         <Image
