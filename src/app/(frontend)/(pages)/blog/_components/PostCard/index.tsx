@@ -11,9 +11,9 @@ type Props = {
 function formatDate(iso: string): string {
   const d = new Date(iso)
   const day = d.getDate()
-  const month = d.toLocaleDateString('ru-RU', { month: 'short' }).replace('.', '')
+  const month = d.toLocaleDateString('ru-RU', { month: 'long' })
   const year = d.getFullYear()
-  return `${day} ${month}. ${year}`
+  return `${day} ${month} ${year}`
 }
 
 export function PostCard({ post }: Props) {
@@ -35,14 +35,11 @@ export function PostCard({ post }: Props) {
       )}
       <div className={styles.body}>
         <div className={styles.authorMeta}>
-          <span className={styles.avatar}></span>
-          <span>{author?.name || 'Автор'}</span>
+          <span>{author?.name}</span>
           {date && (
             <>
               <span className={styles.dot}>·</span>
-              <time className={styles.publishedAt} dateTime={post.publishedAt || undefined}>
-                {date}
-              </time>
+              <time dateTime={post.publishedAt || undefined}>{date}</time>
             </>
           )}
         </div>

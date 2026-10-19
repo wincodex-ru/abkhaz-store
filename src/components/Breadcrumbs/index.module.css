@@ -1,7 +1,7 @@
 .root {
   width: 100%;
   text-align: left;
-  font-size: var(--fs-base);
+  font-size: var(--fs-control);
   color: var(--fg-secondary);
   margin-bottom: var(--sp-3);
 }

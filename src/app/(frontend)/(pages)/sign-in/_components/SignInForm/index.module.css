@@ -15,7 +15,7 @@
 }
 
 .footer {
-  font-size: var(--fs-base);
+  font-size: var(--fs-control);
   color: var(--fg-secondary);
   text-align: center;
 }

@@ -17,7 +17,7 @@
   border: 1px solid var(--border);
   background: var(--bg);
   box-shadow: var(--shadow-sm);
-  font-size: var(--fs-base);
+  font-size: var(--fs-control);
 }
 
 .iconError {

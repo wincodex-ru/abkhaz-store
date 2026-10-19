@@ -6,6 +6,13 @@
   color: inherit;
 }
 
+.card:hover {
+  .title {
+    color: var(--btn-green);
+    text-decoration: underline;
+  }
+}
+
 .cover {
   width: 100%;
   aspect-ratio: 3 / 2;
@@ -26,35 +33,13 @@
   align-items: center;
   gap: var(--sp-1);
   color: var(--fg-secondary);
-  font-size: var(--fs-base);
-}
-
-.publishedAt {
-  font-size: var(--fs-xs);
-}
-
-.avatar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--avatar-size-sm);
-  height: var(--avatar-size-sm);
-  border-radius: var(--radius-full);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  color: var(--fg-secondary);
-  margin-right: var(--sp-1);
+  font-size: var(--fs-control);
 }
 
 .title {
   font-size: var(--fs-md);
   font-weight: var(--fw);
   margin: 0;
-  line-height: 1.4;
-}
-
-.title:hover {
-  text-decoration: underline;
 }
 
 .excerpt {

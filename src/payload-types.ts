@@ -195,6 +195,10 @@ export interface Post {
   cover?: (number | null) | Media;
   readingTime?: number | null;
   categories?: (number | Category)[] | null;
+  location?: {
+    lat?: number | null;
+    lng?: number | null;
+  };
   author: number | User;
   status: 'draft' | 'published';
   publishedAt?: string | null;
@@ -355,6 +359,12 @@ export interface PostsSelect<T extends boolean = true> {
   cover?: T;
   readingTime?: T;
   categories?: T;
+  location?:
+    | T
+    | {
+        lat?: T;
+        lng?: T;
+      };
   author?: T;
   status?: T;
   publishedAt?: T;

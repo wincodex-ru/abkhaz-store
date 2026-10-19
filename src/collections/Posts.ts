@@ -105,6 +105,15 @@ export const Posts: CollectionConfig = {
               label: 'Категории',
             },
             {
+              name: 'location',
+              type: 'group',
+              label: 'Координаты',
+              fields: [
+                { name: 'lat', type: 'number', label: 'Широта' },
+                { name: 'lng', type: 'number', label: 'Долгота' },
+              ],
+            },
+            {
               name: 'author',
               type: 'relationship',
               relationTo: 'users',

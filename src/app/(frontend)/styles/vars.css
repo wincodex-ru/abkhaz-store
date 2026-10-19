@@ -6,6 +6,8 @@
 
   --btn: #2f3542;
   --btn-hover: #454d5e;
+  --btn-green: #00bc7d;
+  --btn-green-hover: #009966;
   --btn-fg: #ffffff;
 
   --border: #e4e6eb;
@@ -13,7 +15,9 @@
   --danger: #d14343;
   --success: #2f9e56;
 
-  --overlay: rgba(26, 29, 33, 0.3);
+  --white: #ffffff;
+
+  --overlay: rgba(0, 0, 0, 0.3);
 
   --shadow-sm: 0 2px 10px rgba(26, 29, 33, 0.06);
 
@@ -42,14 +46,15 @@
   --sp-5: 24px;
 
   --fs-xs: 12.5px;
-  --fs-base: 14px;
-  --fs-md: 18px;
-  --fs-lg: 20px;
-  --fs-xl: 24px;
-  --fs-2xl: 28px;
-  --fs-3xl: 32px;
+  --fs-base: 16px;
+  --fs-control: 14px;
+  --fs-md: 20px;
+  --fs-lg: 22px;
+  --fs-xl: 26px;
+  --fs-2xl: 30px;
+  --fs-3xl: 36px;
 
-  --fw: 500;
+  --fw: 700;
 
   --transition: 0.1s;
 }

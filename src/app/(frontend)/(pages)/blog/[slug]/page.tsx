@@ -1,12 +1,11 @@
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
-import { RichText } from '@payloadcms/richtext-lexical/react'
+import { RichText, defaultJSXConverters } from '@payloadcms/richtext-lexical/react'
 import type { Category, Media, User } from '@/payload-types'
-import Icon from '@/components/Icon'
 import { JsonLd } from '@/components/JsonLd'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { PostHero } from './_components/PostHero'
 import styles from './index.module.css'
 
 export const revalidate = 60
@@ -18,9 +17,9 @@ type Props = {
 function formatDate(iso: string): string {
   const d = new Date(iso)
   const day = d.getDate()
-  const month = d.toLocaleDateString('ru-RU', { month: 'short' }).replace('.', '')
+  const month = d.toLocaleDateString('ru-RU', { month: 'long' })
   const year = d.getFullYear()
-  return `${day} ${month}. ${year}`
+  return `${day} ${month} ${year}`
 }
 
 async function getPost(slug: string) {
@@ -84,6 +83,25 @@ export default async function PostPage({ params }: Props) {
 
   const date = post.publishedAt ? formatDate(post.publishedAt) : null
 
+  const converters = {
+    ...defaultJSXConverters,
+    upload: ({ node }: any) => {
+      const media = node.value as Media
+      if (!media?.url) return null
+      return (
+        <figure className={styles.contentFigure}>
+          <img
+            src={media.url}
+            alt={media.alt || ''}
+            width={media.width || undefined}
+            height={media.height || undefined}
+          />
+          {media.alt && <figcaption>{media.alt}</figcaption>}
+        </figure>
+      )
+    },
+  }
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -139,43 +157,18 @@ export default async function PostPage({ params }: Props) {
         ]}
       />
 
-      <h1 className={styles.title}>{post.title}</h1>
-
-      <div className={styles.metaRow}>
-        <div className={styles.authorMeta}>
-          <span className={styles.avatar}></span>
-          <span>{author?.name || 'Автор'}</span>
-          {date && (
-            <>
-              <span className={styles.dot}>·</span>
-              <time dateTime={post.publishedAt || undefined} className={styles.publishedAt}>
-                {date}
-              </time>
-            </>
-          )}
-        </div>
-
-        <div className={styles.stats}>
-          <span className={styles.statItem}>
-            <Icon name="clock" size={16} />
-            {post.readingTime || 1} мин
-          </span>
-        </div>
-      </div>
-
-      {cover?.url && (
-        <Image
-          src={cover.url}
-          alt={cover.alt || post.title}
-          width={cover.width || 1200}
-          height={cover.height || 675}
-          className={styles.cover}
-          priority
-        />
-      )}
+      <PostHero
+        title={post.title}
+        cover={cover}
+        author={author}
+        date={date}
+        publishedAt={post.publishedAt || null}
+        readingTime={post.readingTime || 1}
+        location={post.location}
+      />
 
       <div className={styles.content}>
-        <RichText data={post.content} />
+        <RichText data={post.content} converters={converters} />
       </div>
 
       <JsonLd data={jsonLd} />

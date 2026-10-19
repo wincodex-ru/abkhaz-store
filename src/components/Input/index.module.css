@@ -6,7 +6,7 @@
 }
 
 .label {
-  font-size: var(--fs-base);
+  font-size: var(--fs-control);
   color: var(--fg);
 }
 
@@ -17,7 +17,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font: inherit;
-  font-size: var(--fs-base);
+  font-size: var(--fs-control);
   background: var(--bg);
   color: var(--fg);
 }

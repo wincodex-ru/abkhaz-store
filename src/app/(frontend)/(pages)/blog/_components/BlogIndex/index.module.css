@@ -29,7 +29,7 @@
 }
 
 .categoryLink {
-  font-size: var(--fs-base);
+  font-size: var(--fs-control);
   padding: var(--sp-1) var(--sp-3);
   border-radius: var(--radius-full);
   color: var(--fg);
