@@ -69,18 +69,7 @@ export const Posts: CollectionConfig = {
               type: 'text',
               required: true,
               unique: true,
-              label: 'Слаг',
-            },
-            {
-              name: 'excerpt',
-              type: 'textarea',
-              label: 'Краткое описание',
-            },
-            {
-              name: 'content',
-              type: 'richText',
-              required: true,
-              label: 'Контент',
+              label: 'Slug',
             },
             {
               name: 'cover',
@@ -105,13 +94,16 @@ export const Posts: CollectionConfig = {
               label: 'Категории',
             },
             {
+              name: 'tags',
+              type: 'relationship',
+              relationTo: 'tags',
+              hasMany: true,
+              label: 'Теги',
+            },
+            {
               name: 'location',
-              type: 'group',
-              label: 'Координаты',
-              fields: [
-                { name: 'lat', type: 'number', label: 'Широта' },
-                { name: 'lng', type: 'number', label: 'Долгота' },
-              ],
+              type: 'text',
+              label: 'Координаты (широта, долгота)',
             },
             {
               name: 'author',
@@ -123,11 +115,6 @@ export const Posts: CollectionConfig = {
                 hidden: true,
               },
             },
-          ],
-        },
-        {
-          label: 'Публикация',
-          fields: [
             {
               name: 'status',
               type: 'select',
@@ -153,6 +140,17 @@ export const Posts: CollectionConfig = {
           ],
         },
         {
+          label: 'Контент',
+          fields: [
+            {
+              name: 'content',
+              type: 'richText',
+              required: true,
+              label: 'Контент',
+            },
+          ],
+        },
+        {
           label: 'SEO',
           fields: [
             {
@@ -163,18 +161,12 @@ export const Posts: CollectionConfig = {
                 {
                   name: 'title',
                   type: 'text',
-                  label: 'SEO-заголовок',
+                  label: 'Заголовок',
                 },
                 {
                   name: 'description',
                   type: 'textarea',
-                  label: 'SEO-описание',
-                },
-                {
-                  name: 'image',
-                  type: 'upload',
-                  relationTo: 'media',
-                  label: 'SEO-изображение',
+                  label: 'Описание',
                 },
               ],
             },

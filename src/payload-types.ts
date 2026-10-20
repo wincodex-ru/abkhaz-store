@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     posts: Post;
     categories: Category;
+    tags: Tag;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -176,7 +178,14 @@ export interface Post {
   id: number;
   title: string;
   slug: string;
-  excerpt?: string | null;
+  cover?: (number | null) | Media;
+  readingTime?: number | null;
+  categories?: (number | Category)[] | null;
+  tags?: (number | Tag)[] | null;
+  location?: string | null;
+  author: number | User;
+  status: 'draft' | 'published';
+  publishedAt?: string | null;
   content: {
     root: {
       type: string;
@@ -192,20 +201,9 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  cover?: (number | null) | Media;
-  readingTime?: number | null;
-  categories?: (number | Category)[] | null;
-  location?: {
-    lat?: number | null;
-    lng?: number | null;
-  };
-  author: number | User;
-  status: 'draft' | 'published';
-  publishedAt?: string | null;
   seo?: {
     title?: string | null;
     description?: string | null;
-    image?: (number | null) | Media;
   };
   updatedAt: string;
   createdAt: string;
@@ -219,6 +217,17 @@ export interface Category {
   title: string;
   slug: string;
   description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  title: string;
+  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -261,6 +270,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: number | Tag;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -354,26 +367,20 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  excerpt?: T;
-  content?: T;
   cover?: T;
   readingTime?: T;
   categories?: T;
-  location?:
-    | T
-    | {
-        lat?: T;
-        lng?: T;
-      };
+  tags?: T;
+  location?: T;
   author?: T;
   status?: T;
   publishedAt?: T;
+  content?: T;
   seo?:
     | T
     | {
         title?: T;
         description?: T;
-        image?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -386,6 +393,16 @@ export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }

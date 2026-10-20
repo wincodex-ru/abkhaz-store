@@ -10,7 +10,26 @@ type Props = {
   date: string | null
   publishedAt: string | null
   readingTime: number | null
-  location?: { lat?: number | null; lng?: number | null } | null
+  wordCount?: number
+  location?: string | null
+}
+
+function pluralWords(n: number): string {
+  const mod10 = n % 10
+  const mod100 = n % 100
+  if (mod10 === 1 && mod100 !== 11) return 'слово'
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'слова'
+  return 'слов'
+}
+
+function parseCoords(input?: string | null): { lat: number; lng: number } | null {
+  if (!input) return null
+  const m = input.match(/(-?\d+(?:\.\d+)?)\s*[,;\s]\s*(-?\d+(?:\.\d+)?)/)
+  if (!m) return null
+  const lat = Number(m[1])
+  const lng = Number(m[2])
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null
+  return { lat, lng }
 }
 
 export function PostHero({
@@ -20,12 +39,11 @@ export function PostHero({
   date,
   publishedAt,
   readingTime,
+  wordCount,
   location,
 }: Props) {
-  const lat = location?.lat
-  const lng = location?.lng
-  const hasCoords = typeof lat === 'number' && typeof lng === 'number'
-  const mapUrl = hasCoords ? `https://yandex.ru/maps/?pt=${lng},${lat}&z=16&l=map` : null
+  const coords = parseCoords(location)
+  const mapUrl = coords ? `https://yandex.ru/maps/?pt=${coords.lng},${coords.lat}&z=16&l=map` : null
 
   return (
     <div className={styles.hero}>
@@ -59,6 +77,23 @@ export function PostHero({
               <time className={styles.metaItem} dateTime={publishedAt || undefined}>
                 {date}
               </time>
+            </>
+          )}
+          {readingTime && readingTime > 0 && (
+            <>
+              <span className={styles.dot}>·</span>
+              <span className={styles.metaItem}>
+                <Icon name="clock" size={14} />
+                {readingTime} мин
+              </span>
+            </>
+          )}
+          {typeof wordCount === 'number' && wordCount > 0 && (
+            <>
+              <span className={styles.dot}>·</span>
+              <span className={styles.metaItem}>
+                {wordCount} {pluralWords(wordCount)}
+              </span>
             </>
           )}
         </div>

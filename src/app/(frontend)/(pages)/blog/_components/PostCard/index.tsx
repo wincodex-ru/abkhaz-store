@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Post, Media, User } from '@/payload-types'
-import Icon from '@/components/Icon'
 import styles from './index.module.css'
 
 type Props = {
@@ -14,6 +13,22 @@ function formatDate(iso: string): string {
   const month = d.toLocaleDateString('ru-RU', { month: 'long' })
   const year = d.getFullYear()
   return `${day} ${month} ${year}`
+}
+
+function lexicalToPlainText(node: any): string {
+  if (!node) return ''
+  if (typeof node === 'string') return node
+  if (Array.isArray(node)) return node.map(lexicalToPlainText).join(' ')
+  let text = ''
+  if (node.text) text += node.text + ' '
+  if (node.children) text += lexicalToPlainText(node.children)
+  return text
+}
+
+function getPreview(content: any, limit = 160): string {
+  const text = lexicalToPlainText(content?.root).replace(/\s+/g, ' ').trim()
+  if (text.length <= limit) return text
+  return text.slice(0, limit).replace(/\s+\S*$/, '') + '…'
 }
 
 export function PostCard({ post }: Props) {
@@ -46,7 +61,7 @@ export function PostCard({ post }: Props) {
 
         <h2 className={styles.title}>{post.title}</h2>
 
-        {post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}
+        {post.content && <p className={styles.excerpt}>{getPreview(post.content)}</p>}
       </div>
     </Link>
   )

@@ -40,6 +40,9 @@
   font-size: var(--fs-md);
   font-weight: var(--fw);
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .excerpt {
@@ -52,4 +55,7 @@
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: calc(var(--fs-base) * 1.4 * 2);
+  line-height: 1.4;
 }

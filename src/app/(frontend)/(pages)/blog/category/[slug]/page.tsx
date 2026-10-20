@@ -2,15 +2,35 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { BlogIndex } from '../../_components/BlogIndex'
+import { CategoryFilters, type TagGroup } from '../../_components/CategoryFilters'
 import { JsonLd } from '@/components/JsonLd'
+import type { Tag } from '@/payload-types'
 
 export const revalidate = 300
 
 const PER_PAGE = 12
 
+const FILTER_KEYS = [
+  { key: 'city', prefix: 'gorod-', label: 'Город' },
+  { key: 'type', prefix: 'tip-', label: 'Тип места' },
+  { key: 'free', prefix: 'besplatno-', label: 'Бесплатный вход' },
+  { key: 'rec', prefix: 'rekomenduem-', label: 'Рекомендуем' },
+  { key: 'time', prefix: 'vremya-', label: 'Время на посещение' },
+  { key: 'season', prefix: 'sezon-', label: 'Сезон' },
+]
+
 type Props = {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ page?: string; q?: string }>
+  searchParams: Promise<{
+    page?: string
+    q?: string
+    city?: string
+    type?: string
+    free?: string
+    rec?: string
+    time?: string
+    season?: string
+  }>
 }
 
 async function getCategory(slug: string) {
@@ -57,13 +77,22 @@ export async function generateMetadata({ params, searchParams }: Props) {
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
-  const { page: pageParam, q } = await searchParams
+  const sp = await searchParams
 
   const category = await getCategory(slug)
   if (!category) notFound()
 
-  const page = Math.max(1, Number(pageParam) || 1)
-  const query = q?.trim() || ''
+  const page = Math.max(1, Number(sp.page) || 1)
+  const query = sp.q?.trim() || ''
+
+  const active: Record<string, string | undefined> = {
+    city: sp.city,
+    type: sp.type,
+    free: sp.free,
+    rec: sp.rec,
+    time: sp.time,
+    season: sp.season,
+  }
 
   const payload = await getPayload({ config })
 
@@ -72,6 +101,20 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   }
   if (query) {
     where.and.push({ title: { contains: query } })
+  }
+
+  const activeSlugs = Object.values(active).filter((v): v is string => !!v)
+  if (activeSlugs.length > 0) {
+    const { docs: selectedTags } = await payload.find({
+      collection: 'tags',
+      where: { slug: { in: activeSlugs } },
+      limit: 100,
+    })
+    if (selectedTags.length > 0) {
+      where.and.push({
+        and: selectedTags.map((t) => ({ tags: { in: [t.id] } })),
+      })
+    }
   }
 
   const {
@@ -93,10 +136,36 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     sort: 'title',
   })
 
+  const { docs: allTags } = await payload.find({
+    collection: 'tags',
+    limit: 500,
+  })
+
+  const groups: TagGroup[] = FILTER_KEYS.map(({ key, prefix, label }) => ({
+    key,
+    prefix,
+    label,
+    tags: (allTags as Tag[]).filter((t) => t.slug.startsWith(prefix)),
+  }))
+
   const buildHref = (p: number) => {
     const params = new URLSearchParams()
     if (query) params.set('q', query)
     if (p > 1) params.set('page', String(p))
+    Object.entries(active).forEach(([k, v]) => {
+      if (v) params.set(k, v)
+    })
+    const qs = params.toString()
+    const base = `/blog/category/${category.slug}`
+    return qs ? `${base}?${qs}` : base
+  }
+
+  const buildFilterHref = (next: Record<string, string | undefined>) => {
+    const params = new URLSearchParams()
+    if (query) params.set('q', query)
+    Object.entries(next).forEach(([k, v]) => {
+      if (v) params.set(k, v)
+    })
     const qs = params.toString()
     const base = `/blog/category/${category.slug}`
     return qs ? `${base}?${qs}` : base
@@ -134,6 +203,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         heading={category.title}
         buildHref={buildHref}
         searchAction={`/blog/category/${category.slug}`}
+        filters={<CategoryFilters groups={groups} active={active} buildHref={buildFilterHref} />}
       />
       <JsonLd data={jsonLd} />
     </>

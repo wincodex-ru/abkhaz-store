@@ -28,7 +28,7 @@ export const Categories: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
-      label: 'Слаг',
+      label: 'Slug',
     },
     {
       name: 'description',

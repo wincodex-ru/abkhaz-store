@@ -22,6 +22,21 @@ function formatDate(iso: string): string {
   return `${day} ${month} ${year}`
 }
 
+function lexicalToPlainText(node: any): string {
+  if (!node) return ''
+  if (typeof node === 'string') return node
+  if (Array.isArray(node)) return node.map(lexicalToPlainText).join(' ')
+  let text = ''
+  if (node.text) text += node.text + ' '
+  if (node.children) text += lexicalToPlainText(node.children)
+  return text
+}
+
+function countWords(content: any): number {
+  const text = lexicalToPlainText(content?.root)
+  return text.trim().split(/\s+/).filter(Boolean).length
+}
+
 async function getPost(slug: string) {
   const payload = await getPayload({ config })
   const { docs } = await payload.find({
@@ -41,10 +56,9 @@ export async function generateMetadata({ params }: Props) {
   if (!post) return {}
 
   const title = post.seo?.title || `${post.title} — Apsgram`
-  const description = post.seo?.description || post.excerpt || undefined
-  const seoImage = typeof post.seo?.image === 'object' ? (post.seo.image as Media) : null
+  const description = post.seo?.description || undefined
   const cover = typeof post.cover === 'object' ? (post.cover as Media) : null
-  const ogImage = seoImage?.url || cover?.url || undefined
+  const ogImage = cover?.url || undefined
 
   return {
     title,
@@ -81,6 +95,8 @@ export default async function PostPage({ params }: Props) {
     ? post.categories.filter((c): c is Category => typeof c === 'object')
     : []
 
+  const wordCount = countWords(post.content)
+
   const date = post.publishedAt ? formatDate(post.publishedAt) : null
 
   const converters = {
@@ -106,7 +122,7 @@ export default async function PostPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
-    description: post.excerpt || post.seo?.description || undefined,
+    description: post.seo?.description || undefined,
     image: cover?.url || undefined,
     datePublished: post.publishedAt || undefined,
     dateModified: post.updatedAt,
@@ -164,6 +180,7 @@ export default async function PostPage({ params }: Props) {
         date={date}
         publishedAt={post.publishedAt || null}
         readingTime={post.readingTime || 1}
+        wordCount={wordCount}
         location={post.location}
       />
 

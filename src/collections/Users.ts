@@ -8,7 +8,7 @@ export const Users: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'email',
-    group: 'Блог',
+    group: 'Общее',
   },
   auth: true,
   access: {

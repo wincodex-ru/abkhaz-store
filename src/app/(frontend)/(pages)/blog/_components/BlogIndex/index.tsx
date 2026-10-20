@@ -16,6 +16,7 @@ type Props = {
   buildHref: (page: number) => string
   searchAction: string
   hiddenCategory?: string
+  filters?: React.ReactNode
 }
 
 export function BlogIndex({
@@ -29,6 +30,7 @@ export function BlogIndex({
   buildHref,
   searchAction,
   hiddenCategory,
+  filters,
 }: Props) {
   return (
     <div className={styles.wrapper}>
@@ -62,6 +64,8 @@ export function BlogIndex({
 
       <main className={styles.content}>
         <h1 className={styles.title}>{heading}</h1>
+
+        {filters}
 
         {posts.length === 0 ? (
           <p className={styles.empty}>
