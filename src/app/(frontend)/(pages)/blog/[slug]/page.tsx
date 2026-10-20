@@ -2,10 +2,11 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { RichText, defaultJSXConverters } from '@payloadcms/richtext-lexical/react'
-import type { Category, Media, User } from '@/payload-types'
+import type { Category, Media, Post, User } from '@/payload-types'
 import { JsonLd } from '@/components/JsonLd'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { PostHero } from './_components/PostHero'
+import { RelatedPosts } from './_components/RelatedPosts'
 import styles from './index.module.css'
 
 export const revalidate = 60
@@ -50,6 +51,57 @@ async function getPost(slug: string) {
   return docs[0] ?? null
 }
 
+async function getRelatedPosts(post: Post): Promise<Post[]> {
+  const firstCategory = Array.isArray(post.categories) ? post.categories[0] : null
+  if (!firstCategory) return []
+
+  const categoryId = typeof firstCategory === 'object' ? firstCategory.id : firstCategory
+  if (typeof categoryId !== 'number') return []
+
+  const payload = await getPayload({ config })
+
+  const { docs } = await payload.find({
+    collection: 'posts',
+    where: {
+      and: [
+        { status: { equals: 'published' } },
+        { categories: { in: [categoryId] } },
+        { id: { not_equals: post.id } },
+      ],
+    },
+    limit: 200,
+    depth: 2,
+  })
+
+  const currentTags = new Set<number>(
+    (Array.isArray(post.tags) ? post.tags : [])
+      .map((t) => (typeof t === 'object' ? t.id : t))
+      .filter((v): v is number => typeof v === 'number'),
+  )
+
+  const scored = docs.map((p) => {
+    const tags = Array.isArray(p.tags) ? p.tags : []
+    const score = tags.reduce<number>((acc, t) => {
+      const id = typeof t === 'object' ? t.id : t
+      return acc + (typeof id === 'number' && currentTags.has(id) ? 1 : 0)
+    }, 0)
+    return { post: p, score }
+  })
+
+  const byTags = scored
+    .filter((s) => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map((s) => s.post)
+
+  const byTagsIds = new Set(byTags.map((p) => p.id))
+
+  const fallback = docs.filter((p) => !byTagsIds.has(p.id)).sort(() => Math.random() - 0.5)
+
+  const merged = [...byTags, ...fallback].slice(0, 6)
+
+  return merged.sort(() => Math.random() - 0.5)
+}
+
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params
   const post = await getPost(slug)
@@ -72,6 +124,7 @@ export async function generateMetadata({ params }: Props) {
       type: 'article',
       url: `/blog/${post.slug}`,
       publishedTime: post.publishedAt || undefined,
+      modifiedTime: post.updatedAt || undefined,
       images: ogImage ? [{ url: ogImage }] : undefined,
     },
     twitter: {
@@ -94,6 +147,8 @@ export default async function PostPage({ params }: Props) {
   const categories = Array.isArray(post.categories)
     ? post.categories.filter((c): c is Category => typeof c === 'object')
     : []
+
+  const related = await getRelatedPosts(post)
 
   const wordCount = countWords(post.content)
 
@@ -126,7 +181,7 @@ export default async function PostPage({ params }: Props) {
     image: cover?.url || undefined,
     datePublished: post.publishedAt || undefined,
     dateModified: post.updatedAt,
-    author: author?.email ? { '@type': 'Person', name: author.email } : undefined,
+    author: author?.email ? { '@type': 'Person', name: author.name } : undefined,
     publisher: {
       '@type': 'Organization',
       name: 'Apsgram',
@@ -160,35 +215,61 @@ export default async function PostPage({ params }: Props) {
     },
   }
 
+  const itemListLd =
+    related.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'Похожие статьи',
+          itemListElement: related.map((p, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            url: `/blog/${p.slug}`,
+            name: p.title,
+          })),
+        }
+      : null
+
   return (
     <article className={styles.root}>
-      <Breadcrumbs
-        items={[
-          { label: 'Главная', href: '/' },
-          { label: 'Блог', href: '/blog' },
-          ...(categories.length > 0
-            ? [{ label: categories[0].title, href: `/blog/category/${categories[0].slug}` }]
-            : []),
-          { label: post.title },
-        ]}
-      />
+      <div className={styles.breadcrumbs}>
+        <Breadcrumbs
+          items={[
+            { label: 'Главная', href: '/' },
+            { label: 'Блог', href: '/blog' },
+            ...(categories.length > 0
+              ? [{ label: categories[0].title, href: `/blog/category/${categories[0].slug}` }]
+              : []),
+            { label: post.title },
+          ]}
+        />
+      </div>
 
-      <PostHero
-        title={post.title}
-        cover={cover}
-        author={author}
-        date={date}
-        publishedAt={post.publishedAt || null}
-        readingTime={post.readingTime || 1}
-        wordCount={wordCount}
-        location={post.location}
-      />
+      <div className={styles.hero}>
+        <PostHero
+          title={post.title}
+          cover={cover}
+          author={author}
+          date={date}
+          publishedAt={post.publishedAt || null}
+          readingTime={post.readingTime || 1}
+          wordCount={wordCount}
+          location={post.location}
+        />
+      </div>
 
       <div className={styles.content}>
         <RichText data={post.content} converters={converters} />
       </div>
 
-      <JsonLd data={jsonLd} />
+      <div className={styles.related}>
+        <RelatedPosts posts={related} />
+      </div>
+
+      <div className={styles.scripts}>
+        <JsonLd data={jsonLd} />
+        {itemListLd && <JsonLd data={itemListLd} />}
+      </div>
     </article>
   )
 }

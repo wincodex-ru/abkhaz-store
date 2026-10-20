@@ -35,7 +35,10 @@ export function BlogIndex({
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-        <SearchInput defaultValue={query} action={searchAction} hiddenCategory={hiddenCategory} />
+        <div className={styles.searchRow}>
+          <SearchInput defaultValue={query} action={searchAction} hiddenCategory={hiddenCategory} />
+          {filters}
+        </div>
 
         {categories.length > 0 && (
           <nav className={styles.categories} aria-label="Категории">
@@ -45,7 +48,7 @@ export function BlogIndex({
                 !activeCategorySlug ? styles.categoryActive : ''
               }`}
             >
-              Все
+              Все категории
             </Link>
             {categories.map((cat) => (
               <Link
@@ -64,8 +67,6 @@ export function BlogIndex({
 
       <main className={styles.content}>
         <h1 className={styles.title}>{heading}</h1>
-
-        {filters}
 
         {posts.length === 0 ? (
           <p className={styles.empty}>

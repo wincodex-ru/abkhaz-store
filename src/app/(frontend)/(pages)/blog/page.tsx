@@ -10,24 +10,22 @@ export const revalidate = 60
 const PER_PAGE = 12
 
 const FILTER_KEYS = [
-  { key: 'city', prefix: 'gorod-', label: 'Город' },
-  { key: 'type', prefix: 'tip-', label: 'Тип места' },
-  { key: 'free', prefix: 'besplatno-', label: 'Бесплатный вход' },
-  { key: 'rec', prefix: 'rekomenduem-', label: 'Рекомендуем' },
-  { key: 'time', prefix: 'vremya-', label: 'Время на посещение' },
-  { key: 'season', prefix: 'sezon-', label: 'Сезон' },
+  { key: 'gorod', prefix: 'gorod-', label: 'Город' },
+  { key: 'tip', prefix: 'tip-', label: 'Тип места' },
+  { key: 'besplatno', prefix: 'besplatno', label: 'Бесплатный вход' },
+  { key: 'rekomenduem', prefix: 'rekomenduem', label: 'Рекомендуем' },
+  { key: 'sezon', prefix: 'sezon-', label: 'Сезон' },
 ]
 
 type Props = {
   searchParams: Promise<{
     page?: string
     q?: string
-    city?: string
-    type?: string
-    free?: string
-    rec?: string
-    time?: string
-    season?: string
+    gorod?: string
+    tip?: string
+    besplatno?: string
+    rekomenduem?: string
+    sezon?: string
   }>
 }
 
@@ -62,12 +60,11 @@ export default async function BlogPage({ searchParams }: Props) {
   const query = sp.q?.trim() || ''
 
   const active: Record<string, string | undefined> = {
-    city: sp.city,
-    type: sp.type,
-    free: sp.free,
-    rec: sp.rec,
-    time: sp.time,
-    season: sp.season,
+    gorod: sp.gorod,
+    tip: sp.tip,
+    besplatno: sp.besplatno,
+    rekomenduem: sp.rekomenduem,
+    sezon: sp.sezon,
   }
 
   const payload = await getPayload({ config })
@@ -81,16 +78,37 @@ export default async function BlogPage({ searchParams }: Props) {
 
   const activeSlugs = Object.values(active).filter((v): v is string => !!v)
   if (activeSlugs.length > 0) {
-    const { docs: selectedTags } = await payload.find({
-      collection: 'tags',
-      where: { slug: { in: activeSlugs } },
-      limit: 100,
-    })
-    if (selectedTags.length > 0) {
-      selectedTags.forEach((t) => {
-        where.and.push({ tags: { in: [t.id] } })
+    let allowedIds: number[] | null = null
+    let broken = false
+
+    for (const slug of activeSlugs) {
+      const { docs: tagDocs } = await payload.find({
+        collection: 'tags',
+        where: { slug: { equals: slug } },
+        limit: 1,
       })
+      const tag = tagDocs[0]
+      if (!tag) {
+        broken = true
+        break
+      }
+
+      const baseAnd: any[] = [{ status: { equals: 'published' } }, { tags: { in: [tag.id] } }]
+      if (allowedIds) baseAnd.push({ id: { in: allowedIds } })
+
+      const { docs: postDocs } = await payload.find({
+        collection: 'posts',
+        where: { and: baseAnd },
+        limit: 1000,
+        depth: 0,
+        pagination: false,
+      })
+
+      allowedIds = postDocs.map((p) => p.id)
+      if (allowedIds.length === 0) break
     }
+
+    where.and.push({ id: { in: broken ? [] : (allowedIds ?? []) } })
   }
 
   const {
@@ -169,7 +187,7 @@ export default async function BlogPage({ searchParams }: Props) {
         heading="Все категории"
         buildHref={buildHref}
         searchAction="/blog"
-        filters={<CategoryFilters groups={groups} active={active} buildHref={buildFilterHref} />}
+        filters={<CategoryFilters groups={groups} active={active} basePath="/blog" query={query} />}
       />
       <JsonLd data={jsonLd} />
     </>

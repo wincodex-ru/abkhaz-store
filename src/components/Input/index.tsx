@@ -16,19 +16,20 @@ export function Input({ label, error, id, type, className = '', ...rest }: Props
 
   return (
     <div className={styles.field}>
-      {label && (
-        <label htmlFor={id} className={styles.label}>
-          {label}
-        </label>
-      )}
       <div className={styles.inputWrap}>
         <input
           id={id}
           type={actualType}
+          placeholder=" "
           {...rest}
           suppressHydrationWarning
-          className={`${styles.input} ${error ? styles.inputError : ''} ${className}`}
+          className={`${styles.input} ${error ? styles.inputError : ''} ${label ? styles.hasLabel : ''} ${className}`}
         />
+        {label && (
+          <label htmlFor={id} className={styles.label}>
+            {label}
+          </label>
+        )}
         {isPassword && (
           <button
             type="button"

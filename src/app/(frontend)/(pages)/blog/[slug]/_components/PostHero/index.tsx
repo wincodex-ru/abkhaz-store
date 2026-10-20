@@ -62,7 +62,7 @@ export function PostHero({
       {mapUrl && (
         <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={styles.mapButton}>
           <Icon name="mapPin" size={16} />
-          Маршрут
+          Показать на карте
         </a>
       )}
 

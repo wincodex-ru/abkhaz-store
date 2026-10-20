@@ -1,0 +1,51 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  width: 100%;
+}
+
+.control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: var(--control-h);
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: var(--fs-control);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  color: var(--btn-fg);
+}
+
+.box > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boxChecked {
+  background: var(--btn);
+  border-color: var(--btn);
+}
+
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

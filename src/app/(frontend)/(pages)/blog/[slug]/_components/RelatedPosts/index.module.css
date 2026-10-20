@@ -1,0 +1,17 @@
+.title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw);
+  margin: 0 0 var(--sp-3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-3);
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

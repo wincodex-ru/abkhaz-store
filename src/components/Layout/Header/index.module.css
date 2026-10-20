@@ -9,7 +9,7 @@
 }
 
 .logo {
-  font-size: var(--fs-md);
+  font-size: var(--fs-base);
   font-weight: var(--fw);
   color: var(--fg);
   text-decoration: none;
@@ -27,4 +27,10 @@
   align-items: center;
   gap: var(--sp-2);
   justify-self: end;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 var(--sp-3);
+  }
 }

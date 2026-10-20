@@ -1,7 +1,6 @@
 .search {
   position: relative;
   width: var(--form-w-sm);
-  margin: 0 auto var(--sp-3);
 }
 
 .searchIcon {
@@ -18,7 +17,7 @@
   height: var(--control-h);
   padding: 0 calc(var(--sp-3) + 16px + var(--sp-2)) 0 calc(var(--sp-3) + 18px + var(--sp-2));
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-full);
   font: inherit;
   font-size: var(--fs-control);
   background: var(--bg-secondary);
@@ -56,4 +55,10 @@
 
 .searchClear:hover {
   color: var(--fg);
+}
+
+@media (max-width: 768px) {
+  .search {
+    width: 100%;
+  }
 }

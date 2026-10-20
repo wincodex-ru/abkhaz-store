@@ -1,12 +1,16 @@
 .root {
-  max-width: var(--content-w-sm);
+  max-width: var(--content-w-md);
   margin: 0 auto;
-  padding: var(--sp-3) var(--sp-4);
+  padding: var(--sp-4) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
 }
 
 .content {
+  min-width: 0;
   font-size: var(--fs-base);
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .content h1,
@@ -20,32 +24,22 @@
 }
 
 .content h1 {
-  font-size: var(--fs-3xl);
-  margin: var(--sp-5) 0 var(--sp-3);
+  font-size: var(--fs-xl);
+  margin: 0 0 var(--sp-3);
 }
 
 .content h2 {
-  font-size: var(--fs-xl);
-  margin: var(--sp-5) 0 var(--sp-3);
+  font-size: var(--fs-lg);
+  margin: 0 0 var(--sp-3);
   scroll-margin-top: var(--sp-4);
 }
 
-.content h3 {
-  font-size: var(--fs-lg);
-  margin: var(--sp-4) 0 var(--sp-2);
-}
-
-.content h4 {
-  font-size: var(--fs-md);
-  margin: var(--sp-4) 0 var(--sp-2);
-}
-
 .content p {
-  margin: 0 0 var(--sp-4);
+  margin: 0 0 var(--sp-3);
 }
 
 .content a {
-  color: var(--btn-green);
+  color: var(--btn);
   text-decoration: none;
 }
 
@@ -61,10 +55,11 @@
 
 .content li {
   margin-bottom: var(--sp-3);
+  margin-left: var(--sp-4);
 }
 
 .content li::marker {
-  color: var(--btn-green);
+  color: var(--btn);
 }
 
 .content blockquote {
@@ -87,7 +82,29 @@
 
 .contentFigure figcaption {
   margin-top: var(--sp-2);
-  font-size: var(--fs-xs);
+  font-size: var(--fs-control);
   color: var(--fg-secondary);
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .root {
+    padding: var(--sp-3);
+  }
+
+  .content h2 {
+    margin: var(--sp-4) 0 var(--sp-2);
+  }
+
+  .content p {
+    margin: 0 0 var(--sp-2);
+  }
+
+  .content li {
+    margin-bottom: var(--sp-2);
+  }
+
+  .contentFigure {
+    margin: var(--sp-2) 0;
+  }
 }
