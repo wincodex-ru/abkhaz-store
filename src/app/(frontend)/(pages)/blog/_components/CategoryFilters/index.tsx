@@ -91,7 +91,7 @@ export function CategoryFilters({ groups, active, basePath, query }: Props) {
         aria-haspopup="dialog"
         aria-expanded={open}
       >
-        <Icon name="filter" size={16} />
+        <Icon name="filter" size={18} />
         {hasActive && <span className={styles.dot} aria-hidden />}
       </button>
 

@@ -74,8 +74,8 @@ export function BlogIndex({
           </p>
         ) : (
           <div className={styles.grid}>
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
+            {posts.map((post, i) => (
+              <PostCard key={post.id} post={post} priority={i < 3} />
             ))}
           </div>
         )}

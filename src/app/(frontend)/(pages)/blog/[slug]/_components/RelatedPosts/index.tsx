@@ -15,8 +15,8 @@ export function RelatedPosts({ posts }: Props) {
         Похожие статьи
       </h2>
       <div className={styles.grid}>
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+        {posts.map((post, i) => (
+          <PostCard key={post.id} post={post} priority={i < 3} />
         ))}
       </div>
     </section>

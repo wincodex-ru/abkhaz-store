@@ -49,7 +49,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
   const category = await getCategory(slug)
   if (!category) return {}
 
-  const title = `${category.title} — Abkhaz Store`
+  const title = category.title
   const description = `Статьи об Абхазии в категории «${category.title}».`
 
   const metadata: any = {
@@ -175,17 +175,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     if (query) params.set('q', query)
     if (p > 1) params.set('page', String(p))
     Object.entries(active).forEach(([k, v]) => {
-      if (v) params.set(k, v)
-    })
-    const qs = params.toString()
-    const base = `/blog/category/${category.slug}`
-    return qs ? `${base}?${qs}` : base
-  }
-
-  const buildFilterHref = (next: Record<string, string | undefined>) => {
-    const params = new URLSearchParams()
-    if (query) params.set('q', query)
-    Object.entries(next).forEach(([k, v]) => {
       if (v) params.set(k, v)
     })
     const qs = params.toString()

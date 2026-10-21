@@ -42,7 +42,7 @@ export function PostHero({
     <div className={styles.hero}>
       {cover?.url && (
         <Image
-          src={cover.url}
+          src={cover.url.replace(/^https?:\/\/[^/]+/, '')}
           alt={cover.alt || title}
           width={cover.width || 1200}
           height={cover.height || 600}

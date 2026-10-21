@@ -5,6 +5,7 @@ import styles from './index.module.css'
 
 type Props = {
   post: Post
+  priority?: boolean
 }
 
 function lexicalToPlainText(node: any): string {
@@ -23,7 +24,7 @@ function getPreview(content: any, limit = 160): string {
   return text.slice(0, limit).replace(/\s+\S*$/, '') + '…'
 }
 
-export function PostCard({ post }: Props) {
+export function PostCard({ post, priority = false }: Props) {
   const cover = typeof post.cover === 'object' ? (post.cover as Media) : null
   const category =
     Array.isArray(post.categories) && post.categories.length > 0
@@ -36,11 +37,13 @@ export function PostCard({ post }: Props) {
     <Link href={`/blog/${post.slug}`} className={styles.card}>
       {cover?.url ? (
         <Image
-          src={cover.url}
+          src={cover.url.replace(/^https?:\/\/[^/]+/, '')}
           alt={cover.alt || post.title}
           width={cover.width || 800}
           height={cover.height || 450}
           className={styles.cover}
+          priority={priority}
+          loading={priority ? 'eager' : 'lazy'}
         />
       ) : (
         <div className={styles.cover} />

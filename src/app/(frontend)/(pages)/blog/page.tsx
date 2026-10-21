@@ -34,14 +34,14 @@ export async function generateMetadata({ searchParams }: Props) {
   const query = q?.trim() || ''
 
   const metadata: any = {
-    title: 'Блог — Abkhaz Store',
-    description: 'Статьи об Абхазии',
+    title: 'Блог',
+    description: 'Открой для себя Абхазию: города, места, пляжи, маршруты и статьи.',
     alternates: {
       canonical: '/blog',
     },
     openGraph: {
-      title: 'Блог — Abkhaz Store',
-      description: 'Статьи об Абхазии',
+      title: 'Блог',
+      description: 'Открой для себя Абхазию: города, места, пляжи, маршруты и статьи.',
       type: 'website',
       url: '/blog',
     },
@@ -153,20 +153,10 @@ export default async function BlogPage({ searchParams }: Props) {
     return qs ? `/blog?${qs}` : '/blog'
   }
 
-  const buildFilterHref = (next: Record<string, string | undefined>) => {
-    const params = new URLSearchParams()
-    if (query) params.set('q', query)
-    Object.entries(next).forEach(([k, v]) => {
-      if (v) params.set(k, v)
-    })
-    const qs = params.toString()
-    return qs ? `/blog?${qs}` : '/blog'
-  }
-
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    name: 'Блог — Abkhaz Store',
+    name: 'Блог',
     url: '/blog',
     blogPost: posts.map((post) => ({
       '@type': 'BlogPosting',

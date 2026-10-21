@@ -11,6 +11,8 @@ import styles from './index.module.css'
 
 export const revalidate = 60
 
+const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+
 type Props = {
   params: Promise<{ slug: string }>
 }
@@ -92,7 +94,7 @@ export async function generateMetadata({ params }: Props) {
   const post = await getPost(slug)
   if (!post) return {}
 
-  const title = post.seo?.title || `${post.title} — Abkhaz Store`
+  const title = post.seo?.title || post.title
   const description = post.seo?.description || undefined
   const cover = typeof post.cover === 'object' ? (post.cover as Media) : null
   const ogImage = cover?.url || undefined
@@ -156,18 +158,32 @@ export default async function PostPage({ params }: Props) {
     },
   }
 
+  const coverImage = cover?.url
+    ? {
+        '@type': 'ImageObject',
+        url: cover.url,
+        width: cover.width || undefined,
+        height: cover.height || undefined,
+        caption: cover.alt || post.title,
+      }
+    : undefined
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.seo?.description || undefined,
-    image: cover?.url || undefined,
+    image: coverImage,
     datePublished: post.publishedAt || undefined,
     dateModified: post.updatedAt,
-    author: author?.email ? { '@type': 'Person', name: author.name } : undefined,
     publisher: {
       '@type': 'Organization',
+      '@id': `${serverUrl}/#organization`,
       name: 'Abkhaz Store',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${serverUrl}/favicon.ico`,
+      },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
