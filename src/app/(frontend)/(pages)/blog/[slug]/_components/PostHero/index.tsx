@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Icon from '@/components/Icon'
 import type { Media, User } from '@/payload-types'
+import { ShareButton } from '../ShareButton'
 import styles from './index.module.css'
 
 type Props = {
@@ -10,16 +11,8 @@ type Props = {
   date: string | null
   publishedAt: string | null
   readingTime: number | null
-  wordCount?: number
   location?: string | null
-}
-
-function pluralWords(n: number): string {
-  const mod10 = n % 10
-  const mod100 = n % 100
-  if (mod10 === 1 && mod100 !== 11) return 'слово'
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'слова'
-  return 'слов'
+  shareUrl: string
 }
 
 function parseCoords(input?: string | null): { lat: number; lng: number } | null {
@@ -39,8 +32,8 @@ export function PostHero({
   date,
   publishedAt,
   readingTime,
-  wordCount,
   location,
+  shareUrl,
 }: Props) {
   const coords = parseCoords(location)
   const mapUrl = coords ? `https://yandex.ru/maps/?pt=${coords.lng},${coords.lat}&z=16&l=map` : null
@@ -59,12 +52,14 @@ export function PostHero({
       )}
       <div className={styles.overlay} />
 
-      {mapUrl && (
-        <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={styles.mapButton}>
-          <Icon name="mapPin" size={16} />
-          Показать на карте
-        </a>
-      )}
+      <div className={styles.actions}>
+        {mapUrl && (
+          <a href={mapUrl} target="_blank" rel="noopener noreferrer" className={styles.mapButton}>
+            Показать на карте
+          </a>
+        )}
+        <ShareButton title={title} url={shareUrl} />
+      </div>
 
       <div className={styles.body}>
         <h1 className={styles.title}>{title}</h1>
@@ -85,14 +80,6 @@ export function PostHero({
               <span className={styles.metaItem}>
                 <Icon name="clock" size={14} />
                 {readingTime} мин
-              </span>
-            </>
-          )}
-          {typeof wordCount === 'number' && wordCount > 0 && (
-            <>
-              <span className={styles.dot}>·</span>
-              <span className={styles.metaItem}>
-                {wordCount} {pluralWords(wordCount)}
               </span>
             </>
           )}

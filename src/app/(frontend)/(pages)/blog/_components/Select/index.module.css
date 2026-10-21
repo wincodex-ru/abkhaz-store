@@ -97,15 +97,20 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-2);
+  width: 100%;
   padding: 0 var(--sp-3);
   height: var(--control-h-sm);
+  border: none;
   border-radius: var(--radius-sm);
+  background: transparent;
   color: var(--fg);
+  font: inherit;
   font-size: var(--fs-control);
-  text-decoration: none;
+  text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
 }
 
 .option:hover {

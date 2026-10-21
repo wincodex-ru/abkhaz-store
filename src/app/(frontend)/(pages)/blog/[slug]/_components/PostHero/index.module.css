@@ -18,7 +18,7 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .body {
@@ -59,24 +59,30 @@
   opacity: 0.7;
 }
 
-.mapButton {
+.actions {
   position: absolute;
   top: var(--sp-3);
   right: var(--sp-3);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.mapButton {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-1);
   height: var(--control-h-sm);
-  padding: 0 var(--sp-3);
+  padding: 0 var(--sp-4);
   border-radius: var(--radius-full);
-  background: var(--btn);
-  color: var(--btn-fg);
+  background: var(--bg);
+  color: var(--fg);
   font-size: var(--fs-control);
   text-decoration: none;
 }
 
 .mapButton:hover {
-  background: var(--btn-hover);
+  background: var(--bg-secondary);
 }
 
 @media (max-width: 768px) {

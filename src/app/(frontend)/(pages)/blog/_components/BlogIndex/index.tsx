@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import type { Post, Category } from '@/payload-types'
-import { PostCard } from '@/app/(frontend)/(pages)/blog/_components/PostCard'
-import { Pagination } from '@/app/(frontend)/(pages)/blog/_components/Pagination'
-import { SearchInput } from '@/app/(frontend)/(pages)/blog/_components/SearchInput'
+import { Pagination } from '../Pagination'
+import { PostCard } from '../PostCard'
+import { SearchInput } from '../SearchInput'
 import styles from './index.module.css'
 
 type Props = {

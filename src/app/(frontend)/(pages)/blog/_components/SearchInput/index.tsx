@@ -32,12 +32,12 @@ export function SearchInput({ defaultValue, action, hiddenCategory }: Props) {
         name="q"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Что хотите почитать ?"
+        placeholder="Искать на Abkhaz Store"
         className={styles.searchInput}
       />
       {value && (
         <button type="button" className={styles.searchClear} onClick={clear} aria-label="Очистить">
-          <Icon name="cross" size={16} />
+          <Icon name="cross" size={22} />
         </button>
       )}
       {hiddenCategory && <input type="hidden" name="category" value={hiddenCategory} />}

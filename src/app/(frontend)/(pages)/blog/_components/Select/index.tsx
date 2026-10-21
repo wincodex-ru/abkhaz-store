@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useId, useRef, useState } from 'react'
-import Link from 'next/link'
 import { AnimatePresence, motion } from 'motion/react'
 import Icon from '@/components/Icon'
 import styles from './index.module.css'
@@ -9,7 +8,6 @@ import styles from './index.module.css'
 export type SelectOption = {
   value?: string
   label: string
-  href: string
 }
 
 type Props = {
@@ -19,7 +17,7 @@ type Props = {
   value?: string
   placeholder?: string
   ariaLabel?: string
-  onNavigate?: () => void
+  onSelect?: (value: string | undefined) => void
 }
 
 export function Select({
@@ -29,7 +27,7 @@ export function Select({
   value,
   placeholder = 'Все',
   ariaLabel,
-  onNavigate,
+  onSelect,
 }: Props) {
   const uid = useId()
   const triggerId = id || `select-${uid}`
@@ -92,23 +90,23 @@ export function Select({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.08, ease: 'linear' }}
+            transition={{ duration: 0.05, ease: 'linear' }}
           >
             {options.map((opt, i) => {
               const isActive = opt.value === value
               return (
                 <li key={`${opt.value ?? 'all'}-${i}`} role="option" aria-selected={isActive}>
-                  <Link
-                    href={opt.href}
+                  <button
+                    type="button"
                     className={`${styles.option} ${isActive ? styles.optionActive : ''}`}
                     onClick={() => {
                       setOpen(false)
-                      onNavigate?.()
+                      onSelect?.(opt.value)
                     }}
                   >
                     <span className={styles.optionLabel}>{opt.label}</span>
                     {isActive && <Icon name="check" size={14} className={styles.optionCheck} />}
-                  </Link>
+                  </button>
                 </li>
               )
             })}

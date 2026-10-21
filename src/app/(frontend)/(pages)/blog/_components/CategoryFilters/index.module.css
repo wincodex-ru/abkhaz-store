@@ -106,7 +106,40 @@
   padding: var(--sp-3) var(--sp-4);
   border-top: 1px solid var(--border);
   display: flex;
-  justify-content: flex-end;
+  gap: var(--sp-2);
+}
+
+.resetBtn,
+.applyBtn {
+  flex: 1;
+  width: 100%;
+  height: var(--control-h);
+  padding: 0 var(--sp-4);
+  border-radius: var(--radius-full);
+  font: inherit;
+  font-size: var(--fs-control);
+  cursor: pointer;
+}
+
+.resetBtn {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.resetBtn:hover {
+  background: var(--bg-secondary);
+}
+
+.applyBtn {
+  border: 1px solid var(--black-hover);
+  background: var(--black);
+  color: var(--btn-fg);
+}
+
+.applyBtn:hover {
+  background: var(--black-hover);
+  border-color: var(--black-hover);
 }
 
 @media (max-width: 768px) {

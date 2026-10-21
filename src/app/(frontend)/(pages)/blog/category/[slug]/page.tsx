@@ -49,7 +49,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
   const category = await getCategory(slug)
   if (!category) return {}
 
-  const title = `${category.title} — Apsgram`
+  const title = `${category.title} — Abkhaz Store`
   const description = `Статьи об Абхазии в категории «${category.title}».`
 
   const metadata: any = {

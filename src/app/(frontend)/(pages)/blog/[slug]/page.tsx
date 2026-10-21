@@ -23,21 +23,6 @@ function formatDate(iso: string): string {
   return `${day} ${month} ${year}`
 }
 
-function lexicalToPlainText(node: any): string {
-  if (!node) return ''
-  if (typeof node === 'string') return node
-  if (Array.isArray(node)) return node.map(lexicalToPlainText).join(' ')
-  let text = ''
-  if (node.text) text += node.text + ' '
-  if (node.children) text += lexicalToPlainText(node.children)
-  return text
-}
-
-function countWords(content: any): number {
-  const text = lexicalToPlainText(content?.root)
-  return text.trim().split(/\s+/).filter(Boolean).length
-}
-
 async function getPost(slug: string) {
   const payload = await getPayload({ config })
   const { docs } = await payload.find({
@@ -107,7 +92,7 @@ export async function generateMetadata({ params }: Props) {
   const post = await getPost(slug)
   if (!post) return {}
 
-  const title = post.seo?.title || `${post.title} — Apsgram`
+  const title = post.seo?.title || `${post.title} — Abkhaz Store`
   const description = post.seo?.description || undefined
   const cover = typeof post.cover === 'object' ? (post.cover as Media) : null
   const ogImage = cover?.url || undefined
@@ -150,8 +135,6 @@ export default async function PostPage({ params }: Props) {
 
   const related = await getRelatedPosts(post)
 
-  const wordCount = countWords(post.content)
-
   const date = post.publishedAt ? formatDate(post.publishedAt) : null
 
   const converters = {
@@ -184,7 +167,7 @@ export default async function PostPage({ params }: Props) {
     author: author?.email ? { '@type': 'Person', name: author.name } : undefined,
     publisher: {
       '@type': 'Organization',
-      name: 'Apsgram',
+      name: 'Abkhaz Store',
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
@@ -253,8 +236,8 @@ export default async function PostPage({ params }: Props) {
           date={date}
           publishedAt={post.publishedAt || null}
           readingTime={post.readingTime || 1}
-          wordCount={wordCount}
           location={post.location}
+          shareUrl={`/blog/${post.slug}`}
         />
       </div>
 

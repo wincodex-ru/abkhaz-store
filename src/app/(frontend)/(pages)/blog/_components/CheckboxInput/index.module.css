@@ -41,8 +41,8 @@
 }
 
 .boxChecked {
-  background: var(--btn);
-  border-color: var(--btn);
+  background: var(--black);
+  border-color: var(--black);
 }
 
 .text {

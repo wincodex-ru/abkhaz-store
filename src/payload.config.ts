@@ -22,7 +22,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      titleSuffix: ' — Apsgram',
+      titleSuffix: ' — Abkhaz Store',
     },
   },
   i18n: {

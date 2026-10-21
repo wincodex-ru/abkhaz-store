@@ -12,7 +12,7 @@ const onest = Onest({
 
 export const metadata = {
   description: 'Открой для себя Абхазию',
-  title: 'Apsgram',
+  title: 'Abkhaz Store',
 }
 
 export default function RootLayout(props: { children: React.ReactNode }) {

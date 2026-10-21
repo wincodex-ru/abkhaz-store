@@ -58,14 +58,13 @@
 }
 
 .categoryActive {
-  background: var(--blue-10);
-  color: var(--btn);
-  border-color: var(--blue-10);
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
 }
 
 .categoryActive:hover {
-  background: var(--blue-10);
-  color: var(--btn);
+  background: var(--black);
 }
 
 .content {

@@ -1,0 +1,17 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  padding: 0;
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  border: none;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--bg-secondary);
+}

@@ -34,13 +34,13 @@ export async function generateMetadata({ searchParams }: Props) {
   const query = q?.trim() || ''
 
   const metadata: any = {
-    title: 'Блог — Apsgram',
+    title: 'Блог — Abkhaz Store',
     description: 'Статьи об Абхазии',
     alternates: {
       canonical: '/blog',
     },
     openGraph: {
-      title: 'Блог — Apsgram',
+      title: 'Блог — Abkhaz Store',
       description: 'Статьи об Абхазии',
       type: 'website',
       url: '/blog',
@@ -166,7 +166,7 @@ export default async function BlogPage({ searchParams }: Props) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    name: 'Блог — Apsgram',
+    name: 'Блог — Abkhaz Store',
     url: '/blog',
     blogPost: posts.map((post) => ({
       '@type': 'BlogPosting',
