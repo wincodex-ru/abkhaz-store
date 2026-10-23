@@ -81,7 +81,7 @@
   left: 0;
   right: 0;
   z-index: 50;
-  max-height: 260px;
+  max-height: 280px;
   overflow-y: auto;
   margin: 0;
   padding: var(--sp-1);
@@ -99,7 +99,7 @@
   gap: var(--sp-2);
   width: 100%;
   padding: 0 var(--sp-3);
-  height: var(--control-h-sm);
+  height: var(--control-h);
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;

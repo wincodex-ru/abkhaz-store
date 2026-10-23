@@ -1,11 +1,5 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { Onest } from 'next/font/google'
-
-const onest = Onest({
-  subsets: ['latin', 'cyrillic'],
-  display: 'swap',
-})
 
 export const metadata: Metadata = {
   title: 'Страница не найдена',
@@ -15,7 +9,6 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div
-      className={onest.className}
       style={{
         minHeight: '70vh',
         display: 'flex',

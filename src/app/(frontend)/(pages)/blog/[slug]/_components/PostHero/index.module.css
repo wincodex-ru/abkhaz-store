@@ -86,6 +86,11 @@
 }
 
 @media (max-width: 768px) {
+  .actions {
+    top: var(--sp-2);
+    right: var(--sp-2);
+  }
+
   .hero {
     aspect-ratio: 3 / 2;
   }

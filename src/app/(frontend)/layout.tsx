@@ -2,7 +2,6 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { Onest } from 'next/font/google'
 import { Layout } from '@/components/Layout'
-import { AlertProvider } from '@/components/Alert'
 import { JsonLd } from '@/components/JsonLd'
 import './styles/globals.css'
 
@@ -81,9 +80,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="ru" className={onest.variable}>
       <body>
-        <AlertProvider>
-          <Layout>{children}</Layout>
-        </AlertProvider>
+        <Layout>{children}</Layout>
         <JsonLd data={siteLd} />
       </body>
     </html>
